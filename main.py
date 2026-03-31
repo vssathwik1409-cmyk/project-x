@@ -1,12 +1,10 @@
 import streamlit as st
-import os
-# Force the library to use the stable v1 API
-os.environ["GOOGLE_API_USE_MTLS_ENDPOINT"] = "never"
+from google import genai
 from duckduckgo_search import DDGS
 import requests
 
-# 1. UI SETUP - "Project X: Stealth Mode"
-st.set_page_config(page_title="Project X | Elite Scout", page_icon="🚀", layout="wide")
+# 1. UI SETUP - "Project X: Elite Stealth Mode"
+st.set_page_config(page_title="Project X | Intelligence Scout", page_icon="🚀", layout="wide")
 
 st.markdown("""
     <style>
@@ -34,25 +32,22 @@ with st.sidebar:
     st.write(f"**ARCHITECT:** SATHWIK")
     st.write(f"**NODE:** {user_loc}")
     st.divider()
-    st.caption("SCANNING: Amazon, Flipkart, Tata CLiQ, Moglix, Croma, Reliance, Vijay Sales")
+    st.caption("SCANNING: Amazon, Flipkart, Tata CLiQ, Moglix, Reliance, Vijay Sales")
 
 # 4. SEARCH & REASONING ENGINE
 st.title("System X: Electronics Intelligence")
-# Fixed accessibility label here
-query = st.text_input("Search Target", placeholder="Enter target device (e.g. Sony PS5, Macbook M3)...", label_visibility="collapsed")
+query = st.text_input("Search Target", placeholder="Enter target device (e.g. Sony PS5, Macbook M3, iPhone 17)...", label_visibility="collapsed")
 
 if query:
     with st.status("Target Locked. Scouting Global Retailers...", expanded=True):
-        # Configure Gemini
-        genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
-        # Standard model name for 2026
-        model = genai.GenerativeModel('gemini-1.5-flash-8b')
-
+        # Initialize the New 2026 GenAI Client
+        client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
+        
         # Deep Search Logic
         search_query = f"{query} price India Amazon Flipkart TataCLiQ Moglix"
         
-        # FIXED INDENTATION BLOCK BELOW
         with DDGS() as ddgs:
+            # Scouting results from the web
             results = [r for r in ddgs.text(search_query, max_results=10)]
         
         analysis_prompt = f"""
@@ -61,16 +56,21 @@ if query:
         Raw Data: {results}
         
         You are Project X Intelligence. Provide:
-        1. A clean comparison table of prices found.
-        2. Absolute Best Value recommendation.
-        3. VERDICT: [PROCEED], [HOLD], or [ABORT].
+        1. A clean comparison table of prices found in INR.
+        2. Absolute Best Value recommendation (considering price and seller reputation).
+        3. VERDICT: [PROCEED] if it's a steal, [HOLD] if price is average, or [ABORT] if overpriced.
         
         Tone: Cold, professional, and accurate.
         """
-        response = model.generate_content(analysis_prompt)
+        
+        # New 2026 Generation Method
+        response = client.models.generate_content(
+            model='gemini-2.0-flash',
+            contents=analysis_prompt
+        )
     
     st.markdown("### 📊 Intelligence Brief")
+    # Output the AI reasoning
     st.markdown(response.text)
 else:
     st.info("Awaiting input for Project X.")
-        
