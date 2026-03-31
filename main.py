@@ -1,6 +1,6 @@
 import streamlit as st
 from google import genai
-from duckduckgo_search import DDGS
+from ddgs import DDGS
 import requests
 
 # 1. UI SETUP - "Project X: Elite Stealth Mode"
