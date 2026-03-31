@@ -44,7 +44,7 @@ if query:
         # Configure Gemini
         genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
         # Standard model name for 2026
-        model = genai.GenerativeModel('gemini-1.5-flash')
+        model = genai.GenerativeModel('models/gemini-1.5-flash')
 
         # Deep Search Logic
         search_query = f"{query} price India Amazon Flipkart TataCLiQ Moglix"
