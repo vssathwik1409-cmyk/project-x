@@ -36,7 +36,7 @@ with st.sidebar:
 
 # 4. SEARCH & REASONING ENGINE
 st.title("System X: Electronics Intelligence")
-query = st.text_input("Search Target", placeholder="Enter target device (e.g. Sony PS5, Macbook M3, iPhone 17)...", label_visibility="collapsed")
+query = st.text_input("Search Target", placeholder="Enter target device (e.g. Sony PS5, Macbook M3)...", label_visibility="collapsed")
 
 if query:
     with st.status("Target Locked. Scouting Global Retailers...", expanded=True):
@@ -57,20 +57,29 @@ if query:
         
         You are Project X Intelligence. Provide:
         1. A clean comparison table of prices found in INR.
-        2. Absolute Best Value recommendation (considering price and seller reputation).
-        3. VERDICT: [PROCEED] if it's a steal, [HOLD] if price is average, or [ABORT] if overpriced.
+        2. Absolute Best Value recommendation.
+        3. VERDICT: [PROCEED], [HOLD], or [ABORT].
         
         Tone: Cold, professional, and accurate.
         """
         
-        # New 2026 Generation Method
-        response = client.models.generate_content(
-            model='gemini-2.0-flash',
-            contents=analysis_prompt
-        )
-    
+        # New 2026 Generation Method with Error Handling
+        try:
+            response = client.models.generate_content(
+                model='gemini-2.0-flash',
+                contents=analysis_prompt,
+                config={'safety_settings': [
+                    {'category': 'HATE_SPEECH', 'threshold': 'BLOCK_NONE'},
+                    {'category': 'HARASSMENT', 'threshold': 'BLOCK_NONE'},
+                    {'category': 'DANGEROUS_CONTENT', 'threshold': 'BLOCK_NONE'},
+                    {'category': 'SEXUALLY_EXPLICIT', 'threshold': 'BLOCK_NONE'}
+                ]}
+            )
+            intelligence_text = response.text
+        except Exception as e:
+            intelligence_text = f"⚠️ **Intelligence Gap:** The scout found data, but the AI refused to process it. Error: {str(e)}"
+
     st.markdown("### 📊 Intelligence Brief")
-    # Output the AI reasoning
-    st.markdown(response.text)
+    st.markdown(intelligence_text)
 else:
     st.info("Awaiting input for Project X.")
