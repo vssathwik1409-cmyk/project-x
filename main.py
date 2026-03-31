@@ -48,7 +48,10 @@ if query:
         search_query = f"'{query}' price India site:amazon.in OR site:flipkart.com OR site:tatacliq.com OR site:moglix.com OR site:croma.com OR site:reliancedigital.in OR site:vijaysales.com"
         
         with DDGS() as ddgs:
-            results = [r for r in ddgs.text(search_query, max_results=15)]
+    # Adding 'India' inside the search string helps the US server find local results
+    results = [r for r in ddgs.text(f"{query} price in INR India", max_results=10)]
+    
+        
         
         analysis_prompt = f"""
         User Location: {user_loc}
