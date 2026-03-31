@@ -64,16 +64,19 @@ if query:
         """
         
         # New 2026 Generation Method with Error Handling
+        # Updated 2026 Generation Method with Correct Safety Enums
         try:
             response = client.models.generate_content(
                 model='gemini-2.0-flash',
                 contents=analysis_prompt,
-                config={'safety_settings': [
-                    {'category': 'HATE_SPEECH', 'threshold': 'BLOCK_NONE'},
-                    {'category': 'HARASSMENT', 'threshold': 'BLOCK_NONE'},
-                    {'category': 'DANGEROUS_CONTENT', 'threshold': 'BLOCK_NONE'},
-                    {'category': 'SEXUALLY_EXPLICIT', 'threshold': 'BLOCK_NONE'}
-                ]}
+                config={
+                    'safety_settings': [
+                        {'category': 'HARM_CATEGORY_HATE_SPEECH', 'threshold': 'BLOCK_NONE'},
+                        {'category': 'HARM_CATEGORY_HARASSMENT', 'threshold': 'BLOCK_NONE'},
+                        {'category': 'HARM_CATEGORY_DANGEROUS_CONTENT', 'threshold': 'BLOCK_NONE'},
+                        {'category': 'HARM_CATEGORY_SEXUALLY_EXPLICIT', 'threshold': 'BLOCK_NONE'}
+                    ]
+                }
             )
             intelligence_text = response.text
         except Exception as e:
