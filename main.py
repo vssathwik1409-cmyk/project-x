@@ -1,5 +1,7 @@
 import streamlit as st
-import google.generativeai as genai
+import os
+# Force the library to use the stable v1 API
+os.environ["GOOGLE_API_USE_MTLS_ENDPOINT"] = "never"
 from duckduckgo_search import DDGS
 import requests
 
@@ -44,7 +46,7 @@ if query:
         # Configure Gemini
         genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
         # Standard model name for 2026
-        model = genai.GenerativeModel('models/gemini-1.5-flash')
+        model = genai.GenerativeModel('gemini-1.5-flash-8b')
 
         # Deep Search Logic
         search_query = f"{query} price India Amazon Flipkart TataCLiQ Moglix"
