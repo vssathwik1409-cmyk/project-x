@@ -20,7 +20,7 @@ st.markdown("""
 def get_user_location():
     try:
         data = requests.get('https://ipapi.co/json/').json()
-        return f"{data.get('city')}, {data.get('region')}"
+        return f"{data.get('city', 'Unknown')}, {data.get('region', 'India')}"
     except: return "India"
 
 user_loc = get_user_location()
@@ -36,22 +36,22 @@ with st.sidebar:
 
 # 4. SEARCH & REASONING ENGINE
 st.title("System X: Electronics Intelligence")
-query = st.text_input("", placeholder="Enter target device (e.g. Sony PS5, Macbook M3, Moglix tools)...")
+# Fixed accessibility label here
+query = st.text_input("Search Target", placeholder="Enter target device (e.g. Sony PS5, Macbook M3)...", label_visibility="collapsed")
 
 if query:
     with st.status("Target Locked. Scouting Global Retailers...", expanded=True):
         # Configure Gemini
         genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
-        model = genai.GenerativeModel('models/gemini-1.5-flash')
+        # Standard model name for 2026
+        model = genai.GenerativeModel('gemini-1.5-flash')
+
+        # Deep Search Logic
+        search_query = f"{query} price India Amazon Flipkart TataCLiQ Moglix"
         
-        # Deep Search Query covering TataCLiQ and Moglix
-        search_query = f"'{query}' price India site:amazon.in OR site:flipkart.com OR site:tatacliq.com OR site:moglix.com OR site:croma.com OR site:reliancedigital.in OR site:vijaysales.com"
-        
+        # FIXED INDENTATION BLOCK BELOW
         with DDGS() as ddgs:
-    # Adding 'India' inside the search string helps the US server find local results
-    results = [r for r in ddgs.text(f"{query} price in INR India", max_results=10)]
-    
-        
+            results = [r for r in ddgs.text(search_query, max_results=10)]
         
         analysis_prompt = f"""
         User Location: {user_loc}
@@ -59,10 +59,9 @@ if query:
         Raw Data: {results}
         
         You are Project X Intelligence. Provide:
-        1. A clean comparison table of all variants and prices found.
-        2. Absolute Best Value recommendation for someone in {user_loc}.
-        3. TECH ADVICE: Is this the right time to buy? Any model refreshes coming?
-        4. VERDICT: [PROCEED], [HOLD], or [ABORT].
+        1. A clean comparison table of prices found.
+        2. Absolute Best Value recommendation.
+        3. VERDICT: [PROCEED], [HOLD], or [ABORT].
         
         Tone: Cold, professional, and accurate.
         """
@@ -72,3 +71,4 @@ if query:
     st.markdown(response.text)
 else:
     st.info("Awaiting input for Project X.")
+        
