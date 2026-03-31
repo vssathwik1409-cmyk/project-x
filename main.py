@@ -42,7 +42,7 @@ if query:
     with st.status("Target Locked. Scouting Global Retailers...", expanded=True):
         # Configure Gemini
         genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
-        model = genai.GenerativeModel('gemini-1.5-flash')
+        model = genai.GenerativeModel('gemini-1.5-flash-latest')
 
         # Deep Search Query covering TataCLiQ and Moglix
         search_query = f"'{query}' price India site:amazon.in OR site:flipkart.com OR site:tatacliq.com OR site:moglix.com OR site:croma.com OR site:reliancedigital.in OR site:vijaysales.com"
