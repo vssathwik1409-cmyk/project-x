@@ -7,8 +7,8 @@ class ProjectConfig:
     VERSION = "2.0-ENTERPRISE"
     TARGET_MARKET = "India"
     
-    # THE FIX: Upgrading back to your 2026 standard!
-    MODEL_CORE = 'gemini-2.0-flash' 
+    # THE FIX: Bypassing the 2.0 Paywall by using the powerful 1.5 Free Tier
+    MODEL_CORE = 'gemini-1.5-flash' 
     
     # Retail Nodes (The 20-Store Target List)
     STORES = [
@@ -32,4 +32,4 @@ class ProjectConfig:
             return st.secrets["GEMINI_API_KEY"]
         except Exception:
             return None
-        
+    
