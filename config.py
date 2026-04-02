@@ -1,4 +1,3 @@
-# config.py
 import streamlit as st
 
 class ProjectConfig:
@@ -8,8 +7,8 @@ class ProjectConfig:
     VERSION = "2.0-ENTERPRISE"
     TARGET_MARKET = "India"
     
-    # AI Models
-    MODEL_CORE = 'gemini-1.5-flash' # 1.5 Flash handles both text and vision beautifully
+    # THE FIX: Upgrading back to your 2026 standard!
+    MODEL_CORE = 'gemini-2.0-flash' 
     
     # Retail Nodes (The 20-Store Target List)
     STORES = [
@@ -33,4 +32,4 @@ class ProjectConfig:
             return st.secrets["GEMINI_API_KEY"]
         except Exception:
             return None
-  
+        
