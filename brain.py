@@ -1,16 +1,11 @@
-import google.generativeai as genai
+from google import genai
 from config import ProjectConfig
 
 class IntelligenceCore:
-    """The AI Engine: Handles reasoning, behavior, and multi-lingual output."""
-    
     def __init__(self):
-        genai.configure(api_key=ProjectConfig.get_api_key())
-        self.model = genai.GenerativeModel(ProjectConfig.MODEL_CORE)
+        self.client = genai.Client(api_key=ProjectConfig.get_api_key())
 
     def generate_consultation(self, user_query, market_data, language="English"):
-        """Generates a high-value response with human-like empathy."""
-        
         system_prompt = f"""
         ROLE: You are Project X, an elite commerce consultant. 
         BEHAVIOR: 
@@ -21,9 +16,11 @@ class IntelligenceCore:
         
         DATA: {market_data}
         """
-        
         try:
-            response = self.model.generate_content(f"{system_prompt}\n\nUSER QUERY: {user_query}")
+            response = self.client.models.generate_content(
+                model=ProjectConfig.MODEL_CORE,
+                contents=f"{system_prompt}\n\nUSER QUERY: {user_query}"
+            )
             return response.text
         except Exception as e:
             return f"System Error: {str(e)}"
