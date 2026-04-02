@@ -11,16 +11,18 @@ class MarketScout:
             "Tata Cliq", "Poorvika", "Sangeetha Mobiles", "Moglix", "Jiomart"
         ]
         self.user_agents = [
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/122.0.0.0",
-            "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_2_1) Safari/605.1.15",
-            "Mozilla/5.0 (X11; Linux x86_64) Firefox/122.0"
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/122.0.0.0",
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_2_1) AppleWebKit/605.1.15",
+            "Mozilla/5.0 (X11; Linux x86_64) Gecko/20100101 Firefox/122.0"
         ]
 
     def get_market_intelligence(self, product_name):
         """Orchestrates multi-node search and returns raw retail data."""
         results = []
-        # Constructing the 'Power Search' string
-        query = f"{product_name} price India ('{' ' or '.join(self.stores)}') buy official"
+        
+        # FIX: Bulletproof string formatting to prevent SyntaxErrors
+        store_string = " OR ".join(self.stores)
+        query = f"{product_name} price India ({store_string}) buy official"
         
         try:
             # Random jitter to simulate human browsing
@@ -37,4 +39,4 @@ class MarketScout:
             return results
         except Exception as e:
             return [{"error": f"Node Communication Failure: {str(e)}"}]
-      
+    
