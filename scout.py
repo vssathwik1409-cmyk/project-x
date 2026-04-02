@@ -1,6 +1,6 @@
 import random
 import time
-from duckduckgo_search import DDGS
+from ddgs import DDGS
 
 class MarketScout:
     """Enterprise-grade web scraping with anti-blocking protocols."""
@@ -13,6 +13,7 @@ class MarketScout:
         self.user_agents = [
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/122.0.0.0",
             "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_2_1) AppleWebKit/605.1.15",
+            "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2 like Mac OS X) AppleWebKit/605.1.15",
             "Mozilla/5.0 (X11; Linux x86_64) Gecko/20100101 Firefox/122.0"
         ]
 
@@ -20,7 +21,7 @@ class MarketScout:
         """Orchestrates multi-node search and returns raw retail data."""
         results = []
         
-        # FIX: Bulletproof string formatting to prevent SyntaxErrors
+        # Bulletproof string formatting to prevent SyntaxErrors
         store_string = " OR ".join(self.stores)
         query = f"{product_name} price India ({store_string}) buy official"
         
@@ -39,4 +40,4 @@ class MarketScout:
             return results
         except Exception as e:
             return [{"error": f"Node Communication Failure: {str(e)}"}]
-    
+        
