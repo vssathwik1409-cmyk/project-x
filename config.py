@@ -1,23 +1,17 @@
 import streamlit as st
 
 class ProjectConfig:
-    """Centralized Configuration for Project X."""
-    
-    # System Details
     VERSION = "2.0-ENTERPRISE"
     TARGET_MARKET = "India"
     
-    # THE FIX: Using the 2026 Free Tier 'Lite' engine to bypass the paywall and the dead 1.5 servers
-    MODEL_CORE = 'gemini-1.5-flash' 
+    # The modern 2026 engine
+    MODEL_CORE = 'gemini-2.0-flash' 
     
-    # Retail Nodes (The 20-Store Target List)
     STORES = [
         "Amazon.in", "Flipkart", "Croma", "Reliance Digital", 
         "Vijay Sales", "Tata Cliq", "Poorvika", "Sangeetha Mobiles", 
         "Moglix", "Jiomart", "Bajaj Electronics"
     ]
-    
-    # Anti-Bot Passports (User-Agents)
     USER_AGENTS = [
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/122.0.0.0",
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_2_1) AppleWebKit/605.1.15",
@@ -27,9 +21,8 @@ class ProjectConfig:
     
     @staticmethod
     def get_api_key():
-        """Safely retrieves the API key from Streamlit Secrets."""
         try:
             return st.secrets["GEMINI_API_KEY"]
         except Exception:
             return None
-    
+            
