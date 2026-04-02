@@ -7,8 +7,8 @@ class ProjectConfig:
     VERSION = "2.0-ENTERPRISE"
     TARGET_MARKET = "India"
     
-    # THE FIX: Bypassing the 2.0 Paywall by using the powerful 1.5 Free Tier
-    MODEL_CORE = 'gemini-1.5-flash' 
+    # THE FIX: Using the 2026 Free Tier 'Lite' engine to bypass the paywall and the dead 1.5 servers
+    MODEL_CORE = 'gemini-2.0-flash-lite' 
     
     # Retail Nodes (The 20-Store Target List)
     STORES = [
