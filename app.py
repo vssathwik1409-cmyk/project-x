@@ -1,8 +1,13 @@
 import streamlit as st
+import time
+from PIL import Image
+
+# Project X Modules
 from core_ui import ProjectXUI
 from scout import MarketScout
 from brain import IntelligenceCore
-import time
+from config import ProjectConfig
+from vision import VisionIntelligence
 
 # --- 1. GLOBAL CONFIGURATION ---
 st.set_page_config(
@@ -22,6 +27,7 @@ if "user_profile" not in st.session_state:
 ui = ProjectXUI()
 scout = MarketScout()
 ai = IntelligenceCore()
+api_key = ProjectConfig.get_api_key()
 
 # --- 4. THE INTERFACE ---
 ui.apply_custom_theme()
@@ -39,6 +45,31 @@ with st.sidebar:
         st.session_state.intelligence_log = []
         st.rerun()
 
+    st.markdown("---")
+    
+    # --- VISUAL SEARCH MODULE ---
+    st.subheader("👁️ Visual Search")
+    uploaded_image = st.file_uploader("Upload Appliance/Gadget Photo", type=["jpg", "png", "jpeg"])
+    
+    if uploaded_image:
+        img = Image.open(uploaded_image)
+        st.image(img, caption="Target Acquired", use_container_width=True)
+        
+        if st.button("Identify & Search", use_container_width=True):
+            with st.spinner("Extracting product signatures..."):
+                vision_engine = VisionIntelligence(api_key)
+                identified_target = vision_engine.identify_product(img)
+                
+                if "INVALID_TARGET" in identified_target or "ERROR" in identified_target:
+                    st.error(f"Scan Failed: {identified_target}. Please upload a clear photo of an electronic device.")
+                else:
+                    st.success(f"Target Identified: {identified_target}")
+                    
+                    # The Magic Hook: Inject the identified item directly into the chat flow!
+                    auto_prompt = f"Find the best price for: {identified_target}"
+                    st.session_state.intelligence_log.append({"role": "user", "content": auto_prompt})
+                    st.rerun() # Forces the app to loop down and execute the Scout!
+
 # --- 5. MAIN EXECUTION FLOW ---
 st.write(f"### Welcome back, {st.session_state.user_profile['name']}.")
 
@@ -51,7 +82,7 @@ for entry in st.session_state.intelligence_log:
             st.markdown(f'<div class="chat-bubble ai-bubble">{entry["content"]}</div>', unsafe_allow_html=True)
 
 # --- 6. INPUT & REASONING ---
-if prompt := st.chat_input("Query the market (e.g., 'Find the best 55-inch OLED TV')"):
+if prompt := st.chat_input("Query the market (e.g., 'Find the best 1.5 Ton Split AC')"):
     # Log User Input
     st.session_state.intelligence_log.append({"role": "user", "content": prompt})
     st.rerun()
@@ -70,4 +101,3 @@ if st.session_state.intelligence_log and st.session_state.intelligence_log[-1]["
         # Step C: Log the AI's professional advice
         st.session_state.intelligence_log.append({"role": "ai", "content": analysis})
         st.rerun()
-      
