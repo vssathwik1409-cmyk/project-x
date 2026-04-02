@@ -8,7 +8,7 @@ class ProjectConfig:
     TARGET_MARKET = "India"
     
     # THE FIX: Using the 2026 Free Tier 'Lite' engine to bypass the paywall and the dead 1.5 servers
-    MODEL_CORE = 'gemini-2.0-flash-lite' 
+    MODEL_CORE = 'gemini-1.5-flash' 
     
     # Retail Nodes (The 20-Store Target List)
     STORES = [
