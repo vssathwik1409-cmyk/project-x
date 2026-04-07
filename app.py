@@ -1,83 +1,32 @@
 import streamlit as st
+from scout import search_product
+from brain import generate_verdict
+from utils import interpret_query
 
-# --- IMPORT ENTERPRISE MODULES ---
-from config import Config
-from guard import Sentinel
-from vault import MemoryVault
-from scout import ScoutEngine
-from brain import IntelligenceCore
-from core_ui import ProjectXUI  # Updated class name
+st.set_page_config(page_title="Project X", layout="wide")
 
-# --- 1. SYSTEM INITIALIZATION ---
-st.set_page_config(
-    page_title="PROJECT X | COMMAND",
-    page_icon="💠",
-    layout="wide",
-    initial_sidebar_state="collapsed"
-)
+st.title("🚀 Project X — Smart Buying Assistant")
 
-# Initialize Defense and Memory
-Sentinel.initialize_session()
-MemoryVault.initialize()
+user_input = st.text_input("What are you looking for?")
 
-# Inject Project X Minimalist Elite Styling
-ProjectXUI.apply_custom_theme()
-
-# --- 2. THE DASHBOARD ---
-# Passing 'ALPHA' as the node name for your header
-ProjectXUI.render_header(node_name="ALPHA")
-
-# Execution Input
-query = st.text_input("ENTER TARGET ASSET", placeholder="Target...")
-
-if st.button("INITIATE RECON"):
-    if not query:
-        st.warning("SYSTEM STANDBY: TARGET DESIGNATION REQUIRED.")
+if st.button("Search"):
+    if not user_input:
+        st.warning("Enter something first")
     else:
-        # Step 1: Query The Vault (Check Memory)
-        cached_result = MemoryVault.retrieve_data(query)
-        
-        if cached_result:
-            st.success("DATA RETRIEVED FROM VAULT (LATENCY: 0.01s)")
-            ProjectXUI.display_results(cached_result)
-        
-        else:
-            # Step 2: Engage The Engine (Scrape & Process)
-            with st.status(f"EXECUTING HYDRA PROTOCOL: {query.upper()}...", expanded=True) as status:
-                
-                # Instantiate Engines
-                scout = ScoutEngine()
-                brain = IntelligenceCore()
-                
-                # Phase A: Data Acquisition
-                st.write("Deploying stealth scrapers...")
-                recon_data = scout.acquire_target_data(query)
-                
-                if recon_data["status"] == "FAILURE":
-                    status.update(label="RECON FAILED", state="error")
-                    st.error("MARKET DATA INACCESSIBLE. ALL SCRAPING TIERS BLOCKED.")
-                else:
-                    # Phase B: Data Synthesis via Groq LPU
-                    st.write("Synthesizing raw data via Groq LPU...")
-                    final_intel = brain.process_intelligence(query, recon_data["payload"])
-                    
-                    if "error" not in final_intel:
-                        # Phase C: Lock Intel in Vault
-                        MemoryVault.store_data(query, final_intel)
-                    
-                    status.update(label="INTELLIGENCE SECURED", state="complete")
-            
-            # Step 3: Render Results to UI
-            ProjectXUI.display_results(final_intel)
+        query = interpret_query(user_input)
 
-# --- 3. SYSTEM LOGS (THE MONITOR) ---
-st.write("---")
-with st.expander("TERMINAL / SYSTEM LOGS"):
-    for log in reversed(st.session_state.logs):
-        if "CRITICAL" in log or "ERROR" in log:
-            st.markdown(f"<span style='color:#FF3B30;'>{log}</span>", unsafe_allow_html=True)
-        elif "SUCCESS" in log:
-            st.markdown(f"<span style='color:#34C759;'>{log}</span>", unsafe_allow_html=True)
-        else:
-            st.markdown(f"<span style='color:#8E8E93;'>{log}</span>", unsafe_allow_html=True)
-                    
+        with st.spinner("Scanning market..."):
+            results = search_product(query)
+
+            if not results:
+                st.error("No results found")
+            else:
+                verdict = generate_verdict(user_input, results)
+
+                for r in results:
+                    st.write(f"**{r['title']}**")
+                    st.write(f"💰 {r['price']}")
+                    st.write(f"[View]({r['link']})")
+                    st.write("---")
+
+                st.success(verdict)               
