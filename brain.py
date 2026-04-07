@@ -1,27 +1,37 @@
 from groq import Groq
+import streamlit as st
 
-client = Groq(api_key="YOUR_API_KEY")
+# Load API key safely from Streamlit secrets
+if "GROQ_API_KEY" not in st.secrets:
+    raise ValueError("GROQ_API_KEY not found in Streamlit secrets")
+
+client = Groq(api_key=st.secrets["GROQ_API_KEY"])
+
 
 def generate_verdict(user_query, results):
     try:
+        if not results:
+            return "I couldn't find enough data to give a solid recommendation."
+
         context = "\n".join(
             [f"{r['title']} - {r['price']}" for r in results]
         )
 
         prompt = f"""
-You are a smart Indian shopping assistant.
+You are a smart and friendly Indian shopping assistant.
 
-User: {user_query}
+User said: "{user_query}"
 
-Data:
+Here are some market options:
 {context}
 
-Give:
-- best option
-- short comparison
-- final verdict (Buy / Wait / Avoid)
+Your job:
+- Talk like a human (not robotic)
+- Compare options briefly
+- Highlight the best deal
+- Give a clear final verdict: Buy / Wait / Avoid
 
-Talk like a helpful human.
+Keep it short, practical, and confident.
 """
 
         response = client.chat.completions.create(
@@ -31,5 +41,5 @@ Talk like a helpful human.
 
         return response.choices[0].message.content
 
-    except Exception:
-        return "Could not generate AI advice. Showing best available options."
+    except Exception as e:
+        return f"⚠️ AI couldn't analyze properly. Showing raw results instead.\nError: {str(e)}"
