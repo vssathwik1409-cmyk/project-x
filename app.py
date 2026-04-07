@@ -6,7 +6,7 @@ from guard import Sentinel
 from vault import MemoryVault
 from scout import ScoutEngine
 from brain import IntelligenceCore
-from core_ui import UI_Engine
+from core_ui import ProjectXUI
 
 # --- 1. SYSTEM INITIALIZATION ---
 st.set_page_config(
