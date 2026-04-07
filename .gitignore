@@ -1,0 +1,8 @@
+# Security
+.streamlit/secrets.toml
+.env
+
+# Cache & Junk files
+__pycache__/
+*.pyc
+.DS_Store
