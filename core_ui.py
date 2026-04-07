@@ -1,4 +1,4 @@
-import streamlit as st
+ import streamlit as st
 
 class ProjectXUI:
     """The Design System for Project X: Minimalist, Dark, and Elite."""
@@ -95,4 +95,43 @@ class ProjectXUI:
 
     @staticmethod
     def render_header(node_name="ALPHA"):
+        """Mobile-First Header: Logo and Title on a single line."""
+        header_html = f"""
+        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+            <div style="width: 48px; height: 48px; background: {ProjectXUI.ACCENT_BLUE}; border-radius: 10px; display: flex; justify-content: center; align-items: center; font-weight: 900; font-size: 26px; color: #fff;">
+                X
+            </div>
+            <div style="line-height: 1.1;">
+                <h1 style='margin:0; padding:0; font-weight:900; letter-spacing:-1.5px; font-size:2.2rem;'>
+                    PROJECT <span style='color:{ProjectXUI.ACCENT_BLUE}'>X</span>
+                </h1>
+                <p style='color:{ProjectXUI.TEXT_DIM}; font-size:0.75rem; margin:0; font-weight:400; letter-spacing:1px; font-family:"JetBrains Mono", monospace;'>
+                    NODE: {node_name} | STATUS: ACTIVE
+                </p>
+            </div>
+        </div>
+        """
+        st.markdown(header_html, unsafe_allow_html=True)
+        st.write("---")
+
+    @staticmethod
+    def display_results(data_dict):
+        """Displays predictive intelligence and market strategy."""
+        if not data_dict or "error" in data_dict:
+            st.error("SYSTEM FAULT: Intelligence synthesis failed.")
+            return
+
+        # Strategy Decision UI
+        strategy = str(data_dict.get('strategy', 'WAIT')).upper()
+        badge_color = ProjectXUI.ADVICE_GREEN if "BUY" in strategy else ProjectXUI.ADVICE_ORANGE
         
+        st.markdown(f"### <span style='color:{badge_color};'>●</span> ADVISOR STRATEGY: {strategy}", unsafe_allow_html=True)
+        st.info(data_dict.get('summary', 'Analysis complete.'))
+        
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.metric("LOWEST PRICE", str(data_dict.get('lowest_price', 'N/A')))
+        with col2:
+            st.metric("BEST PLATFORM", str(data_dict.get('best_platform', 'N/A')))
+        with col3:
+            st.metric("MARKET TREND", str(data_dict.get('market_trend', 'N/A')))
