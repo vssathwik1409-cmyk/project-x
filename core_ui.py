@@ -1,114 +1,120 @@
 import streamlit as st
-import plotly.graph_objects as go
 
-class UI_Engine:
-    """
-    THE VISUAL CORE:
-    Handles all CSS overrides, custom SVG rendering, and Plotly data visualizations.
-    """
+class ProjectXUI:
+    """The Design System for Project X: Minimalist, Dark, and Elite."""
     
     # --- BRAND CONSTANTS ---
-    BG_COLOR = "#050505"
+    BG_PRIMARY = "#050505"
+    ACCENT_BLUE = "#007AFF"
     TEXT_MAIN = "#FFFFFF"
     TEXT_DIM = "#888888"
-    ACCENT_RED = "#D32F2F"
 
     @staticmethod
-    def inject_premium_css():
-        """Overrides Streamlit's default styling for a borderless, luxury feel."""
+    def apply_custom_theme():
+        """Injects your elite CSS, protected with mobile-responsive fixes."""
         st.markdown(f"""
-            <style>
-                /* Import high-end fonts */
-                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap');
-                
-                /* Global Background and Text */
-                .stApp {{
-                    background-color: {UI_Engine.BG_COLOR};
-                    color: {UI_Engine.TEXT_MAIN};
-                    font-family: 'Inter', sans-serif;
-                }}
-                
-                /* Hide Streamlit Clutter */
-                header {{visibility: hidden;}}
-                #MainMenu {{visibility: hidden;}}
-                footer {{visibility: hidden;}}
-                [data-testid="stSidebar"] {{display: none;}}
-                
-                /* Luxury Input Field */
-                .stTextInput input {{
-                    background-color: transparent !important;
-                    border: none !important;
-                    border-bottom: 2px solid {UI_Engine.TEXT_DIM} !important;
-                    color: {UI_Engine.TEXT_MAIN} !important;
-                    border-radius: 0px !important;
-                    font-size: 1.2rem !important;
-                    padding: 10px 0px !important;
-                    transition: border-color 0.3s ease;
-                }}
-                .stTextInput input:focus {{
-                    border-bottom: 2px solid {UI_Engine.ACCENT_RED} !important;
-                    box-shadow: none !important;
-                }}
-                
-                /* Ferrari-Style Execution Button */
-                .stButton > button {{
-                    width: 100%;
-                    background-color: transparent;
-                    color: {UI_Engine.TEXT_MAIN};
-                    border: 1px solid {UI_Engine.TEXT_MAIN};
-                    border-radius: 0px;
-                    padding: 15px 30px;
-                    font-weight: 700;
-                    letter-spacing: 2px;
-                    text-transform: uppercase;
-                    transition: all 0.3s ease;
-                }}
-                .stButton > button:hover {{
-                    background-color: {UI_Engine.ACCENT_RED};
-                    border-color: {UI_Engine.ACCENT_RED};
-                    color: {UI_Engine.TEXT_MAIN};
-                }}
-                
-                /* Data Metrics Cards */
-                div[data-testid="stMetric"] {{
-                    background-color: rgba(255,255,255,0.03);
-                    border: 1px solid rgba(255,255,255,0.1);
-                    padding: 20px;
-                    border-radius: 5px;
-                }}
-            </style>
+        <style>
+            /* Global Reset & Typography */
+            @import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;600;900&family=JetBrains+Mono&display=swap');
+            
+            :root {{
+                --bg-primary: {ProjectXUI.BG_PRIMARY};
+                --accent-blue: {ProjectXUI.ACCENT_BLUE};
+                --glass-bg: rgba(255, 255, 255, 0.03);
+                --border-color: rgba(255, 255, 255, 0.1);
+            }}
+
+            .stApp {{ 
+                background-color: var(--bg-primary); 
+                color: {ProjectXUI.TEXT_MAIN}; 
+                font-family: 'SF Pro Display', sans-serif;
+            }}
+
+            /* Hide Streamlit Clutter */
+            header {{visibility: hidden;}}
+            #MainMenu {{visibility: hidden;}}
+            footer {{visibility: hidden;}}
+            
+            /* Sidebar Transformation */
+            section[data-testid="stSidebar"] {{
+                background-color: #000000 !important;
+                border-right: 1px solid var(--border-color);
+            }}
+
+            /* --- FIXED VISIBLE SEARCH BAR --- */
+            div[data-baseweb="input"] {{
+                background-color: #1A1A1A !important;
+                border: 1px solid #333333 !important;
+                border-radius: 8px !important; /* Slightly rounded to match your bubbles */
+            }}
+            div[data-baseweb="input"]:focus-within {{
+                border-color: var(--accent-blue) !important;
+            }}
+            input {{
+                color: {ProjectXUI.TEXT_MAIN} !important;
+                font-size: 1.1rem !important;
+                padding: 12px !important;
+                background-color: transparent !important;
+                font-family: 'SF Pro Display', sans-serif;
+            }}
+            input::placeholder {{
+                color: #555555 !important;
+            }}
+            
+            /* Elite Execution Button */
+            .stButton > button {{
+                width: 100%;
+                background-color: transparent;
+                color: {ProjectXUI.TEXT_MAIN};
+                border: 1px solid {ProjectXUI.TEXT_MAIN};
+                border-radius: 8px;
+                padding: 15px 30px;
+                font-weight: 600;
+                letter-spacing: 1.5px;
+                transition: all 0.3s ease;
+                margin-top: 10px;
+            }}
+            .stButton > button:hover {{
+                background-color: var(--accent-blue);
+                border-color: var(--accent-blue);
+                color: {ProjectXUI.TEXT_MAIN};
+            }}
+            
+            /* Data Metrics Cards */
+            div[data-testid="stMetric"] {{
+                background: var(--glass-bg);
+                border: 1px solid var(--border-color);
+                padding: 20px;
+                border-radius: 12px;
+                backdrop-filter: blur(10px);
+            }}
+        </style>
         """, unsafe_allow_html=True)
 
     @staticmethod
-    def render_header():
-        """Renders the custom SVG logo and minimalist title."""
-        # Sharp, geometric 'S' symbol
-        custom_svg = f"""
-        <svg width="50" height="50" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M10 30L90 30L50 50L90 70L10 70L50 50L10 30Z" stroke="{UI_Engine.ACCENT_RED}" stroke-width="4" fill="none"/>
-        </svg>
+    def render_header(node_name="ALPHA"):
+        """Renders the Project X title using Flexbox for perfect mobile alignment."""
+        header_html = f"""
+        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px;">
+            <div style="width: 45px; height: 45px; background: {ProjectXUI.ACCENT_BLUE}; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-weight: 900; font-size: 24px; color: #fff;">
+                X
+            </div>
+            <div style="line-height: 1.1;">
+                <h1 style='margin:0; padding:0; font-weight:900; letter-spacing:-1px; font-size:2.2rem;'>
+                    PROJECT <span style='color:{ProjectXUI.ACCENT_BLUE}'>X</span>
+                </h1>
+                <p style='color:{ProjectXUI.TEXT_DIM}; font-size:0.75rem; margin:0; font-weight:400; letter-spacing:1px; font-family:"JetBrains Mono", monospace;'>
+                    NODE: {node_name} | STATUS: ACTIVE
+                </p>
+            </div>
+        </div>
         """
-        col1, col2 = st.columns([1, 10])
-        with col1:
-            st.markdown(custom_svg, unsafe_allow_html=True)
-        with col2:
-            st.markdown(
-                f"<h1 style='margin:0; padding:0; font-weight:900; letter-spacing:-2px; font-size:2.5rem;'>"
-                f"SENTRI<span style='color:{UI_Engine.ACCENT_RED}'>.AI</span></h1>", 
-                unsafe_allow_html=True
-            )
-            st.markdown(
-                f"<p style='color:{UI_Engine.TEXT_DIM}; font-size:0.9rem; margin-top:-5px; font-weight:300; letter-spacing:1px;'>"
-                f"AUTONOMOUS MARKET INTELLIGENCE // GROQ LPU</p>", 
-                unsafe_allow_html=True
-            )
+        st.markdown(header_html, unsafe_allow_html=True)
         st.write("---")
 
     @staticmethod
     def display_results(data_dict):
-        """
-        Takes the JSON output from brain.py and formats it into luxury UI components.
-        """
+        """Formats JSON output into your luxury UI components."""
         if "error" in data_dict:
             st.error(f"SYSTEM FAULT: {data_dict['error']}")
             return
@@ -118,9 +124,9 @@ class UI_Engine:
         
         col1, col2, col3 = st.columns(3)
         with col1:
-            st.metric("LOWEST DETECTED PRICE", str(data_dict.get('lowest_price', 'N/A')))
+            st.metric("LOWEST PRICE", str(data_dict.get('lowest_price', 'N/A')))
         with col2:
-            st.metric("AVERAGE MARKET PRICE", str(data_dict.get('average_price', 'N/A')))
+            st.metric("AVERAGE MARKET", str(data_dict.get('average_price', 'N/A')))
         with col3:
-            st.metric("MARKET TREND", str(data_dict.get('market_trend', 'N/A')))
+            st.metric("TREND", str(data_dict.get('market_trend', 'N/A')))
         
