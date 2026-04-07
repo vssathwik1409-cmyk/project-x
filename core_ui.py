@@ -8,13 +8,15 @@ class ProjectXUI:
     ACCENT_BLUE = "#007AFF"
     TEXT_MAIN = "#FFFFFF"
     TEXT_DIM = "#888888"
+    ADVICE_GREEN = "#34C759"
+    ADVICE_ORANGE = "#FF9500"
 
     @staticmethod
     def apply_custom_theme():
-        """Injects your elite CSS, protected with mobile-responsive fixes."""
+        """Injects your elite CSS, optimized for mobile visibility and SF Pro aesthetics."""
         st.markdown(f"""
         <style>
-            /* Global Reset & Typography */
+            /* Typography & Global Style */
             @import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;600;900&family=JetBrains+Mono&display=swap');
             
             :root {{
@@ -30,22 +32,18 @@ class ProjectXUI:
                 font-family: 'SF Pro Display', sans-serif;
             }}
 
-            /* Hide Streamlit Clutter */
+            /* Clean Dashboard: Hide Streamlit Default UI */
             header {{visibility: hidden;}}
             #MainMenu {{visibility: hidden;}}
             footer {{visibility: hidden;}}
-            
-            /* Sidebar Transformation */
-            section[data-testid="stSidebar"] {{
-                background-color: #000000 !important;
-                border-right: 1px solid var(--border-color);
-            }}
+            [data-testid="stSidebar"] {{ background-color: #000000 !important; border-right: 1px solid var(--border-color); }}
 
-            /* --- FIXED VISIBLE SEARCH BAR --- */
+            /* --- TARGET INPUT BOX (VISIBLE & ELITE) --- */
             div[data-baseweb="input"] {{
                 background-color: #1A1A1A !important;
                 border: 1px solid #333333 !important;
-                border-radius: 8px !important; /* Slightly rounded to match your bubbles */
+                border-radius: 8px !important;
+                transition: border-color 0.3s ease;
             }}
             div[data-baseweb="input"]:focus-within {{
                 border-color: var(--accent-blue) !important;
@@ -55,13 +53,9 @@ class ProjectXUI:
                 font-size: 1.1rem !important;
                 padding: 12px !important;
                 background-color: transparent !important;
-                font-family: 'SF Pro Display', sans-serif;
-            }}
-            input::placeholder {{
-                color: #555555 !important;
             }}
             
-            /* Elite Execution Button */
+            /* --- PROJECT X ACTION BUTTON --- */
             .stButton > button {{
                 width: 100%;
                 background-color: transparent;
@@ -70,17 +64,17 @@ class ProjectXUI:
                 border-radius: 8px;
                 padding: 15px 30px;
                 font-weight: 600;
-                letter-spacing: 1.5px;
+                letter-spacing: 2px;
+                text-transform: uppercase;
                 transition: all 0.3s ease;
                 margin-top: 10px;
             }}
             .stButton > button:hover {{
                 background-color: var(--accent-blue);
                 border-color: var(--accent-blue);
-                color: {ProjectXUI.TEXT_MAIN};
             }}
             
-            /* Data Metrics Cards */
+            /* --- INTELLIGENCE CARDS --- */
             div[data-testid="stMetric"] {{
                 background: var(--glass-bg);
                 border: 1px solid var(--border-color);
@@ -88,45 +82,17 @@ class ProjectXUI:
                 border-radius: 12px;
                 backdrop-filter: blur(10px);
             }}
+            
+            /* Custom Info Box */
+            .stAlert {{
+                background: rgba(0, 122, 255, 0.05) !important;
+                border: 1px solid var(--accent-blue) !important;
+                color: white !important;
+                border-radius: 12px !important;
+            }}
         </style>
         """, unsafe_allow_html=True)
 
     @staticmethod
     def render_header(node_name="ALPHA"):
-        """Renders the Project X title using Flexbox for perfect mobile alignment."""
-        header_html = f"""
-        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px;">
-            <div style="width: 45px; height: 45px; background: {ProjectXUI.ACCENT_BLUE}; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-weight: 900; font-size: 24px; color: #fff;">
-                X
-            </div>
-            <div style="line-height: 1.1;">
-                <h1 style='margin:0; padding:0; font-weight:900; letter-spacing:-1px; font-size:2.2rem;'>
-                    PROJECT <span style='color:{ProjectXUI.ACCENT_BLUE}'>X</span>
-                </h1>
-                <p style='color:{ProjectXUI.TEXT_DIM}; font-size:0.75rem; margin:0; font-weight:400; letter-spacing:1px; font-family:"JetBrains Mono", monospace;'>
-                    NODE: {node_name} | STATUS: ACTIVE
-                </p>
-            </div>
-        </div>
-        """
-        st.markdown(header_html, unsafe_allow_html=True)
-        st.write("---")
-
-    @staticmethod
-    def display_results(data_dict):
-        """Formats JSON output into your luxury UI components."""
-        if "error" in data_dict:
-            st.error(f"SYSTEM FAULT: {data_dict['error']}")
-            return
-
-        st.markdown(f"### MARKET SYNTHESIS")
-        st.info(data_dict.get('summary', 'Analysis complete.'))
-        
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            st.metric("LOWEST PRICE", str(data_dict.get('lowest_price', 'N/A')))
-        with col2:
-            st.metric("AVERAGE MARKET", str(data_dict.get('average_price', 'N/A')))
-        with col3:
-            st.metric("TREND", str(data_dict.get('market_trend', 'N/A')))
         
