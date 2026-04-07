@@ -1,28 +1,26 @@
 import streamlit as st
 
-class ProjectConfig:
-    VERSION = "2.0-ENTERPRISE"
-    TARGET_MARKET = "India"
+class Config:
+    """
+    SENTRI.AI ENTERPRISE CONFIGURATION
+    Pulls directly from Streamlit's built-in Secrets management.
+    """
+    # --- INTELLIGENCE ACCESS ---
+    try:
+        GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
+    except KeyError:
+        st.error("CRITICAL: GROQ_API_KEY not found in Streamlit Secrets.")
+        st.stop()
+
+    GROQ_MODEL = "llama-3.3-70b-versatile"
     
-    # The modern 2026 engine
-    MODEL_CORE = 'gemini-2.0-flash' 
-    
-    STORES = [
-        "Amazon.in", "Flipkart", "Croma", "Reliance Digital", 
-        "Vijay Sales", "Tata Cliq", "Poorvika", "Sangeetha Mobiles", 
-        "Moglix", "Jiomart", "Bajaj Electronics"
+    # --- HYDRA PROTOCOL TARGETS (10 STORES) ---
+    TARGET_STORES = [
+        "Amazon", "Flipkart", "Reliance Digital", "Croma", "Vijay Sales",
+        "Newegg", "Best Buy", "B&H Photo", "Walmart", "eBay"
     ]
-    USER_AGENTS = [
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/122.0.0.0",
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_2_1) AppleWebKit/605.1.15",
-        "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2 like Mac OS X) AppleWebKit/605.1.15",
-        "Mozilla/5.0 (X11; Linux x86_64) Gecko/20100101 Firefox/122.0"
-    ]
     
-    @staticmethod
-    def get_api_key():
-        try:
-            return st.secrets["GEMINI_API_KEY"]
-        except Exception:
-            return None
-            
+    # --- SYSTEM THRESHOLDS ---
+    TIMEOUT = 12
+    MAX_RETRIES = 3
+    SCRAPE_LIMIT = 10 # 10 Stores per search
