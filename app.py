@@ -6,12 +6,12 @@ from guard import Sentinel
 from vault import MemoryVault
 from scout import ScoutEngine
 from brain import IntelligenceCore
-from core_ui import ProjectXUI
+from core_ui import ProjectXUI  # Updated class name
 
 # --- 1. SYSTEM INITIALIZATION ---
 st.set_page_config(
-    page_title="SENTRI.AI | COMMAND",
-    page_icon="⚡",
+    page_title="PROJECT X | COMMAND",
+    page_icon="💠",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
@@ -20,14 +20,15 @@ st.set_page_config(
 Sentinel.initialize_session()
 MemoryVault.initialize()
 
-# Inject Luxury Option 2 Styling (Ferrari/Minimalist Vibe)
-UI_Engine.inject_premium_css()
+# Inject Project X Minimalist Elite Styling
+ProjectXUI.apply_custom_theme()
 
 # --- 2. THE DASHBOARD ---
-UI_Engine.render_header()
+# Passing 'ALPHA' as the node name for your header
+ProjectXUI.render_header(node_name="ALPHA")
 
 # Execution Input
-query = st.text_input("ENTER TARGET ASSET", placeholder="e.g., RTX 5090, PS5 Pro, or Ferrari 812")
+query = st.text_input("ENTER TARGET ASSET", placeholder="Target...")
 
 if st.button("INITIATE RECON"):
     if not query:
@@ -38,7 +39,7 @@ if st.button("INITIATE RECON"):
         
         if cached_result:
             st.success("DATA RETRIEVED FROM VAULT (LATENCY: 0.01s)")
-            UI_Engine.display_results(cached_result)
+            ProjectXUI.display_results(cached_result)
         
         else:
             # Step 2: Engage The Engine (Scrape & Process)
@@ -67,16 +68,16 @@ if st.button("INITIATE RECON"):
                     status.update(label="INTELLIGENCE SECURED", state="complete")
             
             # Step 3: Render Results to UI
-            UI_Engine.display_results(final_intel)
+            ProjectXUI.display_results(final_intel)
 
-# --- 3. SYSTEM LOGS (THE GOGGINS MONITOR) ---
+# --- 3. SYSTEM LOGS (THE MONITOR) ---
 st.write("---")
 with st.expander("TERMINAL / SYSTEM LOGS"):
     for log in reversed(st.session_state.logs):
         if "CRITICAL" in log or "ERROR" in log:
-            st.markdown(f"<span style='color:{UI_Engine.ACCENT_RED};'>{log}</span>", unsafe_allow_html=True)
+            st.markdown(f"<span style='color:#FF3B30;'>{log}</span>", unsafe_allow_html=True)
         elif "SUCCESS" in log:
-            st.markdown(f"<span style='color:#00C853;'>{log}</span>", unsafe_allow_html=True)
+            st.markdown(f"<span style='color:#34C759;'>{log}</span>", unsafe_allow_html=True)
         else:
-            st.markdown(f"<span style='color:{UI_Engine.TEXT_DIM};'>{log}</span>", unsafe_allow_html=True)
+            st.markdown(f"<span style='color:#8E8E93;'>{log}</span>", unsafe_allow_html=True)
                     
