@@ -17,4 +17,4 @@ def interpret_query(user_input):
     else:
         category = user_input
 
-    return f"{category} price India"
+    return f"{category} buy online India Amazon Flipkart price"
